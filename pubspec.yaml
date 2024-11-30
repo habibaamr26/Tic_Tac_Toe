@@ -71,6 +71,7 @@ flutter:
       - assest/letter-o_6819204.png
       - assest/photo_2024-02-27_01-29-40.jpg
       - assest/2911167.png
+      - assest/start.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

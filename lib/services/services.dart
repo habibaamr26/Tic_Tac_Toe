@@ -37,13 +37,13 @@ Widget customeButton({
   required void Function()? onPressed,
   required String text,
   required context,
-  int color=0xFFA93226,
+  int color=0xFFf39c12 ,
 }) =>
     Container(
-      width: double.infinity,
+      width: 300,
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(25),
         color: Color(color),
       ),
       child: TextButton(
@@ -54,4 +54,36 @@ Widget customeButton({
       ),
     );
 
+
+
+
+Widget textField({
+  required String text,
+  required TextEditingController controller,
+  String? Function(String?)? validator,
+  required bool readOnly,
+}) =>
+    TextFormField(
+      validator: validator,
+      controller:controller ,
+      maxLength: 10,
+      readOnly: readOnly,
+      style: const TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+        hintText: text,
+        hintStyle: const TextStyle(
+          color: Color(0xFFFFFFFF),
+          fontWeight: FontWeight.w400,
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white)),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(color: Colors.white)),
+      ),
+    );
 

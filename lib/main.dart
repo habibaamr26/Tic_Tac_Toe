@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/cubit/cubit.dart';
-import 'screens/begin_screen/begin screen.dart';
+import 'package:tic_tac_toe/screens/start_screen/start_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -21,19 +22,20 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           appBarTheme:   AppBarTheme(
             elevation: 0,
-            backgroundColor:Color(0xFF6495ED),
+            backgroundColor:Color(0xFF5b2c6f ),
           ),
-          scaffoldBackgroundColor:Color(0xFF6495ED ),
+          scaffoldBackgroundColor:Color(0xFF5b2c6f),
           textTheme: const TextTheme(
             displayMedium: TextStyle(
               color: Colors.white,
-              fontSize: 28,
-              fontWeight: FontWeight.bold
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+
             ),
 
           )
         ),
-        home:  Start(),
+        home:  StartScreen(),
       ),
     );
   }
