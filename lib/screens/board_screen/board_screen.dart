@@ -6,9 +6,8 @@ import 'package:tic_tac_toe/cubit/state.dart';
 import '../../services/services.dart';
 
 class BoardScreen extends StatelessWidget {
- late bool x;
-   BoardScreen(this.x,{super.key});
-
+  late bool isComputer;
+  BoardScreen(this.isComputer, {super.key});
   @override
   Widget build(BuildContext context) {
     var cubit = TicTacBloc.get(context);
@@ -33,15 +32,22 @@ class BoardScreen extends StatelessWidget {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              customeIimageHomeBage(image: "assest/photo_2024-02-27_01-29-40.jpg",
-                                  radius:x?cubit.oTurnCumputer==false ? 35 : 24:cubit.oTurn==false ? 35 : 25 ),
-
+                              customeIimageHomeBage(
+                                  image: "assest/photo_2024-02-27_01-29-40.jpg",
+                                  radius: isComputer
+                                      ? cubit.oTurnComputer == false
+                                          ? 35
+                                          : 24
+                                      : cubit.oTurn == false
+                                          ? 35
+                                          : 25),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
                                 cubit.xName!,
-                                style: TextStyle(color: Colors.white, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
                               ),
                             ],
                           ),
@@ -55,7 +61,8 @@ class BoardScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   "${cubit.xScore}",
-                                  style: Theme.of(context).textTheme.displayMedium,
+                                  style:
+                                      Theme.of(context).textTheme.displayMedium,
                                 ),
                                 Container(
                                   width: 2.6,
@@ -65,23 +72,31 @@ class BoardScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   "${cubit.oScore}",
-                                  style: Theme.of(context).textTheme.displayMedium,
+                                  style:
+                                      Theme.of(context).textTheme.displayMedium,
                                 )
                               ],
                             ),
                           ),
-
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              customeIimageHomeBage(image: "assest/letter-o_6819204.png",
-                                  radius:x?cubit.oTurnCumputer==true ? 35 : 24:cubit.oTurn==true ? 35 : 24 ),
+                              customeIimageHomeBage(
+                                  image: "assest/letter-o_6819204.png",
+                                  radius: isComputer
+                                      ? cubit.oTurnComputer == true
+                                          ? 35
+                                          : 24
+                                      : cubit.oTurn == true
+                                          ? 35
+                                          : 24),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
                                 cubit.oName!,
-                                style: TextStyle(color: Colors.white, fontSize: 16),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
                               ),
                             ],
                           ),
@@ -99,23 +114,20 @@ class BoardScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14),
                       //color: Colors.grey[300],
                     ),
-
-
                     child: GridView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: 9,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3),
                       itemBuilder: (BuildContext context, int index) {
                         return InkWell(
                           onTap: () {
-                            if(x) {
+                            if (isComputer) {
                               cubit.onTapToComputer(index, context);
-                            }
-                            else{
-                              cubit.indexOnTapMultiple(index, context);
-
+                            } else {
+                              cubit.indexOnTapMultiplayer(index, context);
                             }
                           },
                           child: Container(
@@ -128,16 +140,14 @@ class BoardScreen extends StatelessWidget {
                             ),
                             child: Center(
                                 child: Text(
-                                  cubit.displayIndex[index],
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 50,
-                                      fontWeight: FontWeight.bold),
-                                )),
+                              cubit.displayIndex[index],
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold),
+                            )),
                           ),
-                      );
-
-
+                        );
                       },
                     ),
                   ),
@@ -147,9 +157,9 @@ class BoardScreen extends StatelessWidget {
                   customeButton(
                     context: context,
                     onPressed: () {
-                       Navigator.pop(context);
-                       cubit.clearBoardNewGame();
-                      },
+                      Navigator.pop(context);
+                      cubit.clearBoardNewGame();
+                    },
                     text: "Leave",
                     //color: 0xFFA93226,
                   ),

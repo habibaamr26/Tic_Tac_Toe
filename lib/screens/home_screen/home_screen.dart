@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tic_tac_toe/cubit/cubit.dart';
 import 'package:tic_tac_toe/cubit/state.dart';
 import 'package:tic_tac_toe/services/services.dart';
-import '../home_screen/board_screen.dart';
-class MultiPLayerScreen extends StatelessWidget {
-  late bool x;
-   MultiPLayerScreen(this.x,{super.key});
+import '../board_screen/board_screen.dart';
+class HomeScreen extends StatelessWidget {
+  late bool isComputer;
+  HomeScreen(this.isComputer,{super.key});
   TextEditingController oController = TextEditingController();
   TextEditingController xController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -32,30 +32,26 @@ class MultiPLayerScreen extends StatelessWidget {
                   const SizedBox(
                     height: 70,
                   ),
-                  const Text(
+                   Text(
                     "TIC  TAK  TOE",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      fontSize:35,
-                    ),
+                    style:  Theme.of(context).textTheme.displayLarge
                   ),
                   const SizedBox(
                     height: 70,
                   ),
                   /// to enter first play name
-                  textField(text:x? "Computer":"Name of player X",
+                  textField(text:isComputer? "Computer":"Name of player X",
                     controller: xController,
                     validator: (String? note) {
-                    if(!x)
+                    //if is computer you don't need to enter first name
+                      if(!isComputer)
                       {
-                      if (note!.isEmpty) {
-                        return "enter Name please";
-                      }
-                      return null;
-                    } },
-                    readOnly:x? true:false,
+                        if (note!.isEmpty) {
+                          return "enter Name please";
+                        }
+                        return null;
+                      } },
+                    readOnly:isComputer? true:false,
                   ),
                   const SizedBox(
                     height: 15,
@@ -78,13 +74,13 @@ class MultiPLayerScreen extends StatelessWidget {
                     context: context,
                     onPressed: () {
                       if(formKey.currentState!.validate()) {
-                        if(x)
+                        if(isComputer)
                           xController.text="Computer";
-                        cubit.setName(xController.text, oController.text,x);
+                        cubit.setName(xController.text, oController.text,isComputer);
                         oController.clear();
                         xController.clear();
                         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                          return  BoardScreen(x);
+                          return  BoardScreen(isComputer);
                         }));
                       }
                     },
@@ -101,13 +97,3 @@ class MultiPLayerScreen extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-

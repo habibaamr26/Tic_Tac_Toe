@@ -32,6 +32,12 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.bold,
 
             ),
+            displayLarge:TextStyle(
+              color: Colors.white,
+              fontSize: 38,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic
+            ),
 
           )
         ),

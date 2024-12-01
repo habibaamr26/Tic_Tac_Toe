@@ -1,17 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/cubit/state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../services/services.dart';
 import 'dart:math';
 
 class TicTacBloc extends Cubit<TicTacState> {
   TicTacBloc() : super(InitState());
-
   static TicTacBloc get(context) => BlocProvider.of(context);
-
+  // variable
   String? xName;
   String? oName;
   bool? oTurn;
@@ -19,10 +16,14 @@ class TicTacBloc extends Cubit<TicTacState> {
   int fillBox = 0;
   int oScore = 0;
   int xScore = 0;
+  String computerName = "Computer";
+  bool oTurnComputer = true;
+  bool gameOver = false;
+  String emptySpace = "";
 
-// to work with local multiple player
-  void indexOnTapMultiple(index, context) {
-    if (displayIndex[index] == "") {
+  /// to work with local multiplayer
+  void indexOnTapMultiplayer(index, context) {
+    if (displayIndex[index] == emptySpace) {
       fillBox++;
       onTap(index, context);
       emit(OnTapState());
@@ -33,7 +34,7 @@ class TicTacBloc extends Cubit<TicTacState> {
     index,
     context,
   ) {
-    if (oTurn == true && displayIndex[index] == "") {
+    if (oTurn == true && displayIndex[index] == emptySpace) {
       displayIndex[index] = "o";
     } else {
       displayIndex[index] = "x";
@@ -46,6 +47,7 @@ class TicTacBloc extends Cubit<TicTacState> {
     checkWinShow(context);
   }
 
+// to change every round how start
   void chooseRandomRange() {
     Random random = Random();
     int randomNumber = random.nextInt(100);
@@ -58,27 +60,27 @@ class TicTacBloc extends Cubit<TicTacState> {
 
   void clearBoard() {
     for (int i = 0; i < 9; i++) {
-      displayIndex[i] = "";
+      displayIndex[i] = emptySpace;
     }
     fillBox = 0;
-    oTurn = true;
+    oTurnComputer = true;
     gameOver = false; // Reset the game-over flag
     emit(ClearBoardState());
   }
 
   void clearBoardNewGame() {
     for (int i = 0; i < 9; i++) {
-      displayIndex[i] = "";
+      displayIndex[i] = emptySpace;
       fillBox = 0;
       oScore = 0;
       xScore = 0;
     }
-    oTurn = true;
+    oTurnComputer = true;
     gameOver = false;
     emit(ClearBoardState());
   }
 
-  // required to show result
+  //to show result to user
   void showToast({
     required String message,
     required context,
@@ -90,7 +92,6 @@ class TicTacBloc extends Cubit<TicTacState> {
       oScore++;
       message = oName!;
     }
-
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -120,7 +121,6 @@ class TicTacBloc extends Cubit<TicTacState> {
                 customeButton(
                     context: context,
                     onPressed: () {
-                      oTurnCumputer = true;
                       clearBoard();
                       Navigator.of(context).pop();
                     },
@@ -131,7 +131,6 @@ class TicTacBloc extends Cubit<TicTacState> {
                 customeButton(
                     context: context,
                     onPressed: () {
-                      oTurnCumputer = true;
                       clearBoardNewGame();
                       Navigator.of(context).pop();
                     },
@@ -152,14 +151,12 @@ class TicTacBloc extends Cubit<TicTacState> {
         });
   }
 
-  String cumputerName = "Computer";
-
-  bool oTurnCumputer = true;
-
-  void setName(xController, oController, x) {
-    if (x) {
-      xName = cumputerName;
+  void setName(xController, oController, isComputer) {
+    if (isComputer) {
+      xName = computerName;
       oName = oController;
+      clearBoardNewGame();
+      chooseRandomRange();
     } else {
       xName = xController;
       oName = oController;
@@ -169,22 +166,23 @@ class TicTacBloc extends Cubit<TicTacState> {
     emit(SetNameState());
   }
 
+  /// to work with computer
   void onTapToComputer(index, context) {
     if (gameOver) return;
-    if (displayIndex[index] == "" && oTurnCumputer == true) {
+    if (displayIndex[index] == emptySpace && oTurnComputer == true) {
       displayIndex[index] = "o";
       fillBox++;
-      oTurnCumputer = false;
+      oTurnComputer = false;
       emit(OnTapState());
       checkWinShow(context);
       if (!gameOver) {
-        Future.delayed(Duration(milliseconds: 500), findBestMove(displayIndex,context) as FutureOr Function()?);
-
+        Future.delayed(Duration(milliseconds: 500),
+            findBestMove(displayIndex, context) as FutureOr Function()?);// AI makes its move after a short delay
       }
-    } else if (displayIndex[index] == "" && oTurnCumputer == false) {
+    } else if (displayIndex[index] == emptySpace && oTurnComputer == false) {
       displayIndex[index] = "x";
       fillBox++;
-      oTurnCumputer = true;
+      oTurnComputer = true;
       emit(OnTapState());
       checkWinShow(context);
     }
@@ -194,57 +192,49 @@ class TicTacBloc extends Cubit<TicTacState> {
     // Checking rows
     if (displayIndex[0] == displayIndex[1] &&
         displayIndex[0] == displayIndex[2] &&
-        displayIndex[0] != '') {
+        displayIndex[0] != emptySpace) {
       return displayIndex[0]; // Winner is found
     } else if (displayIndex[3] == displayIndex[4] &&
         displayIndex[3] == displayIndex[5] &&
-        displayIndex[3] != '') {
+        displayIndex[3] != emptySpace) {
       return displayIndex[3]; // Winner is found
     } else if (displayIndex[6] == displayIndex[7] &&
         displayIndex[6] == displayIndex[8] &&
-        displayIndex[6] != '') {
+        displayIndex[6] != emptySpace) {
       return displayIndex[6]; // Winner is found
     }
-
     // Checking Columns
     else if (displayIndex[0] == displayIndex[3] &&
         displayIndex[0] == displayIndex[6] &&
-        displayIndex[0] != '') {
+        displayIndex[0] != emptySpace) {
       return displayIndex[0]; // Winner is found
     } else if (displayIndex[1] == displayIndex[4] &&
         displayIndex[1] == displayIndex[7] &&
-        displayIndex[1] != '') {
+        displayIndex[1] != emptySpace) {
       return displayIndex[1]; // Winner is found
     } else if (displayIndex[2] == displayIndex[5] &&
         displayIndex[2] == displayIndex[8] &&
-        displayIndex[2] != '') {
+        displayIndex[2] != emptySpace) {
       return displayIndex[2]; // Winner is found
     }
-
     // Checking Diagonal (Top-left to Bottom-right)
     else if (displayIndex[0] == displayIndex[4] &&
         displayIndex[0] == displayIndex[8] &&
-        displayIndex[0] != '') {
+        displayIndex[0] != emptySpace) {
       return displayIndex[0]; // Winner is found
     }
-
     // Checking Diagonal (Top-right to Bottom-left)
     else if (displayIndex[2] == displayIndex[4] &&
         displayIndex[2] == displayIndex[6] &&
-        displayIndex[2] != '') {
+        displayIndex[2] != emptySpace) {
       return displayIndex[2]; // Winner is found
-    }
-
-    // Checking for Draw
+    } // Checking for Draw
     else if (fillBox == 9) {
       return "draw"; // Draw condition if all cells are filled and no winner
     }
-
     return " "; // No winner yet
   }
-
-  bool gameOver = false;
-
+  ///check winner and call showToast to appear to user
   void checkWinShow(context) {
     // If the game is already over, do nothing
     if (gameOver) return;
@@ -265,67 +255,68 @@ class TicTacBloc extends Cubit<TicTacState> {
     }
   }
 
-  Future findBestMove(board,context) async {
+// Function to find the best move for the computer
+  Future findBestMove(board, context) async {
+    // Initialize best score and best move index
     int bestScore = -999;
-    int bestindex = -1;
-    //int bestCol = -1;
-    //board[][] pieces = board.getPieces();
-
+    int bestIndex = -1;
+    // Loop through all positions on the board to find the best move
     for (int i = 0; i < 9; i++) {
-      if (board[i] == "") {
+      if (board[i] == emptySpace){
         board[i] = "x";
+        // Call minimax to evaluate the score of this move
         int moveValue = minimax(board, 0, false);
-        board[i] = "";
-
+        board[i] = emptySpace;
         if (moveValue > bestScore) {
-          bestindex = i;
-
+          bestIndex = i;
           bestScore = moveValue;
         }
       }
     }
-    if (bestindex != -1) {
-      onTapToComputer(bestindex, context) ;
+    if (bestIndex != -1) {
+      onTapToComputer(bestIndex, context);  // Make the move on the board
     }
-
   }
 
-
-  // move wala result eka minimax algo eka use krla recuresive widihta check krnwa
+// Minimax function to calculate the score
   int minimax(pieces, int dep, bool isMaximizing) {
+    // Check if there is a winner
     var winner = checkWin();
     if (winner != null) {
       if (winner == "x") {
-        return 10 - dep;
+        return 10 - dep; // Computer wins, return positive score
       } else if (winner == "o") {
-        return dep - 10;
+        return dep - 10; // Player wins, return negative score
       }
     }
     if (gameOver) {
       return 0;
     }
+    // Computer's turn, maximizing the score
     if (isMaximizing) {
       int bestScore = -999;
       for (int i = 0; i < 9; i++) {
-        if (pieces[i] == "") {
+        if (pieces[i] == emptySpace) {
           pieces[i] = "x";
+          // Recursively call minimax to evaluate the move
           bestScore = max(bestScore, minimax(pieces, dep + 1, false));
-          pieces[i] = "";
+          pieces[i] = emptySpace;  // Undo the move
         }
       }
       return bestScore;
     } else {
+      //Player's turn, minimizing the score
       int bestScore = 9999;
       for (int i = 0; i < 9; i++) {
-        if (pieces[i] == "") {
+        if (pieces[i] == emptySpace) {
           pieces[i] = "o";
+          // Recursively call minimax to evaluate the move
           bestScore = min(bestScore, minimax(pieces, dep + 1, true));
-          pieces[i] = "";
+          pieces[i] = emptySpace;  // Undo the move
         }
       }
-      return bestScore;
+      return bestScore;  // Return the best score found for minimizing
     }
   }
-
 
 }
