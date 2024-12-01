@@ -102,7 +102,7 @@ class TicTacBloc extends Cubit<TicTacState> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CircleAvatar(
-                  backgroundImage: const AssetImage("assest/king_2701700.png"),
+                  backgroundImage: const AssetImage("assest/image/king_2701700.png"),
                   radius: 70,
                   backgroundColor: Colors.grey[300],
                 ),
@@ -176,8 +176,10 @@ class TicTacBloc extends Cubit<TicTacState> {
       emit(OnTapState());
       checkWinShow(context);
       if (!gameOver) {
-        Future.delayed(Duration(milliseconds: 500),
-            findBestMove(displayIndex, context) as FutureOr Function()?);// AI makes its move after a short delay
+        Future.delayed(
+            Duration(milliseconds: 500),
+                () => findBestMove(displayIndex, context)  // Wrap the function call inside a closure
+        );// AI makes its move after a short delay
       }
     } else if (displayIndex[index] == emptySpace && oTurnComputer == false) {
       displayIndex[index] = "x";
@@ -256,7 +258,7 @@ class TicTacBloc extends Cubit<TicTacState> {
   }
 
 // Function to find the best move for the computer
-  Future findBestMove(board, context) async {
+  Future  findBestMove(board, context) async {
     // Initialize best score and best move index
     int bestScore = -999;
     int bestIndex = -1;

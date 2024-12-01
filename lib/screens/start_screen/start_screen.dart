@@ -16,7 +16,7 @@ class StartScreen extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(children: [
             Image(
-              image: AssetImage("assest/start.png"),
+              image: AssetImage("assest/image/start.png"),
               fit: BoxFit.cover,
             ),
             SizedBox(

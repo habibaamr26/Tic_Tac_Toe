@@ -33,7 +33,7 @@ class BoardScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               customeIimageHomeBage(
-                                  image: "assest/photo_2024-02-27_01-29-40.jpg",
+                                  image: "assest/image/photo_2024-02-27_01-29-40.jpg",
                                   radius: isComputer
                                       ? cubit.oTurnComputer == false
                                           ? 35
@@ -82,7 +82,7 @@ class BoardScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               customeIimageHomeBage(
-                                  image: "assest/letter-o_6819204.png",
+                                  image: "assest/image/letter-o_6819204.png",
                                   radius: isComputer
                                       ? cubit.oTurnComputer == true
                                           ? 35
